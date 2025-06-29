@@ -1,0 +1,211 @@
+** start of index.html **
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>US Phone Number Validator</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">📞 US Phone Number <span>Validator</span></h1>
+    <div class="input-group">
+      <input id="user-input" type="text" placeholder="Enter US phone number..." />
+      <div class="buttons">
+        <button id="check-btn">Check</button>
+        <button id="clear-btn" class="clear">Clear</button>
+      </div>
+    </div>
+    <div id="results-div" class="results"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+** end of index.html **
+
+** start of styles.css **
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.title span {
+  color: #ffd700;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+input[type="text"] {
+  padding: 0.75rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  box-shadow: 0 0 10px #ffd700;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+#check-btn {
+  background: #ffd700;
+  color: #2c3e50;
+}
+
+#check-btn:hover {
+  background: #f1c40f;
+  transform: scale(1.05);
+}
+
+.clear {
+  background: transparent;
+  border: 2px solid #ffd700;
+  color: #ffd700;
+}
+
+.clear:hover {
+  background: #ffd700;
+  color: #2c3e50;
+  transform: scale(1.05);
+}
+
+.results {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.results-text {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+** end of styles.css **
+
+** start of script.js **
+
+const userInput = document.getElementById('user-input');
+const checkBtn = document.getElementById('check-btn');
+const clearBtn = document.getElementById('clear-btn');
+const resultsDiv = document.getElementById('results-div');
+
+const checkValidNumber = input => {
+  if (input === '') {
+    alert('Please provide a phone number');
+    return;
+  }
+  const countryCode = '^(1\\s?)?';
+  const areaCode = '(\\([0-9]{3}\\)|[0-9]{3})';
+  const spacesDashes = '[\\s\\-]?';
+  const phoneNumber = '[0-9]{3}[\\s\\-]?[0-9]{4}$';
+  const phoneRegex = new RegExp(
+    `${countryCode}${areaCode}${spacesDashes}${phoneNumber}`
+  );
+
+  const pTag = document.createElement('p');
+  pTag.className = 'results-text';
+  phoneRegex.test(input)
+    ? (pTag.style.color = '#00471b')
+    : (pTag.style.color = '#4d3800');
+  pTag.appendChild(
+    document.createTextNode(
+      `${phoneRegex.test(input) ? 'Valid' : 'Invalid'} US number: ${input}`
+    )
+  );
+  resultsDiv.appendChild(pTag);
+};
+
+checkBtn.addEventListener('click', () => {
+  checkValidNumber(userInput.value);
+  userInput.value = '';
+});
+
+userInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    checkValidNumber(userInput.value);
+    userInput.value = '';
+  }
+});
+
+clearBtn.addEventListener('click', () => {
+  resultsDiv.textContent = '';
+});
+
+** end of script.js **
+
